@@ -3,6 +3,8 @@
 
 namespace App\Controllers;
 
+// LS-MiniSocial-Core
+
 class LandingController extends BaseController
 {
     public function index()

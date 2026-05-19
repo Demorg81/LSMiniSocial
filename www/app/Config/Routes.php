@@ -26,6 +26,9 @@ $routes->get('/home', 'HomeController::index', ['filter' => 'auth:You must be lo
 
 $routes->get('/post/create', 'PostController::create', ['filter' => 'auth']);
 $routes->get('/post/edit/(:num)', 'PostController::edit/$1', ['filter' => 'auth']);
+$routes->post('/post/create', 'PostController::store', ['filter' => 'auth']);
+$routes->post('/post/edit/(:num)', 'PostController::update/$1', ['filter' => 'auth']);
+$routes->post('/post/delete/(:num)', 'PostController::delete/$1', ['filter' => 'auth']);
 
 $routes->get('/profile', 'ProfileController::index', ['filter' => 'auth']);
 $routes->post('/profile', 'ProfileController::update', ['filter' => 'auth']);
