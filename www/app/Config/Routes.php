@@ -40,8 +40,8 @@ $routes->get('/posts/(:num)', 'Api\PostApiController::show/$1', ['filter' => 'au
 $routes->put('/posts/(:num)', 'Api\PostApiController::update/$1', ['filter' => 'auth']);
 $routes->delete('/posts/(:num)', 'Api\PostApiController::delete/$1', ['filter' => 'auth']);
 
-$routes->post('/posts/(:num)/like', 'Api\InteractionApiController::like/$1', ['filter' => 'auth']);
-$routes->delete('/posts/(:num)/like', 'Api\InteractionApiController::unlike/$1', ['filter' => 'auth']);
+$routes->post('/posts/(:num)/like', 'Api\InteractionApiController::addLike/$1', ['filter' => 'auth']);
+$routes->delete('/posts/(:num)/like', 'Api\InteractionApiController::removeLike/$1', ['filter' => 'auth']);
 $routes->get('/posts/(:num)/comments', 'Api\InteractionApiController::getComments/$1', ['filter' => 'auth']);
 $routes->post('/posts/(:num)/comments', 'Api\InteractionApiController::addComment/$1', ['filter' => 'auth']);
 $routes->delete('/comments/(:num)', 'Api\InteractionApiController::deleteComment/$1', ['filter' => 'auth']);
