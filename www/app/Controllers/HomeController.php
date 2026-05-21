@@ -11,7 +11,8 @@ class HomeController extends BaseController
     public function index(): string
     {
         $postModel = new PostModel();
-        $posts = $postModel->getFeedPosts();
+        $currentUserId = (int) session()->get('user_id');
+        $posts = $postModel->getFeedPosts($currentUserId);
 
         return view('home', ['posts' => $posts]);
     }

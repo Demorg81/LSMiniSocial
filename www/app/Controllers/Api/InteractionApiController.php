@@ -11,21 +11,21 @@ use CodeIgniter\HTTP\ResponseInterface;
 // LS-MiniSocial-Core
 class InteractionApiController extends BaseController
 {
-    private LikeModel $likeModel;
+    private LikeModel    $likeModel;
     private CommentModel $commentModel;
-    private PostModel $postModel;
+    private PostModel    $postModel;
 
     public function __construct()
     {
-        $this->likeModel = new LikeModel();
+        $this->likeModel    = new LikeModel();
         $this->commentModel = new CommentModel();
-        $this->postModel = new PostModel();
+        $this->postModel    = new PostModel();
     }
 
     // POST /posts/{id}/like
     public function addLike(int $postId): ResponseInterface
     {
-        $userId = session()->get('user_id');
+        $userId = (int) session()->get('user_id');
 
         if (!$this->postModel->find($postId)) {
             return $this->response
@@ -47,7 +47,7 @@ class InteractionApiController extends BaseController
         return $this->response
             ->setStatusCode(201)
             ->setJSON([
-                'message' => 'Post liked.',
+                'message'    => 'Post liked.',
                 'like_count' => $this->likeModel->countForPost($postId),
             ]);
     }
@@ -55,7 +55,7 @@ class InteractionApiController extends BaseController
     // DELETE /posts/{id}/like
     public function removeLike(int $postId): ResponseInterface
     {
-        $userId = session()->get('user_id');
+        $userId = (int) session()->get('user_id');
 
         if (!$this->postModel->find($postId)) {
             return $this->response
@@ -77,7 +77,7 @@ class InteractionApiController extends BaseController
         return $this->response
             ->setStatusCode(200)
             ->setJSON([
-                'message' => 'Like removed.',
+                'message'    => 'Like removed.',
                 'like_count' => $this->likeModel->countForPost($postId),
             ]);
     }
@@ -91,7 +91,8 @@ class InteractionApiController extends BaseController
                 ->setJSON(['error' => 'Post not found.']);
         }
 
-        $comments = $this->commentModel->getCommentsForPost($postId);
+        $currentUserId = (int) session()->get('user_id');
+        $comments = $this->commentModel->getCommentsForPost($postId, $currentUserId);
 
         return $this->response
             ->setStatusCode(200)
@@ -101,7 +102,7 @@ class InteractionApiController extends BaseController
     // POST /posts/{id}/comments
     public function addComment(int $postId): ResponseInterface
     {
-        $userId = session()->get('user_id');
+        $userId = (int) session()->get('user_id');
 
         if (!$this->postModel->find($postId)) {
             return $this->response
@@ -109,7 +110,7 @@ class InteractionApiController extends BaseController
                 ->setJSON(['error' => 'Post not found.']);
         }
 
-        $json = $this->request->getJSON(true);
+        $json    = $this->request->getJSON(true);
         $content = trim($json['content'] ?? $this->request->getPost('content') ?? '');
 
         if ($content === '') {
@@ -124,8 +125,15 @@ class InteractionApiController extends BaseController
             'content' => $content,
         ]);
 
-        $comments = $this->commentModel->getCommentsForPost($postId);
-        $new = end($comments); // last inserted
+        // Recuperamos el comentario recién creado con JOIN para traer username y is_owner
+        $comments = $this->commentModel->getCommentsForPost($postId, $userId);
+        $new = null;
+        foreach ($comments as $c) {
+            if ((int)$c['id'] === (int)$commentId) {
+                $new = $c;
+                break;
+            }
+        }
 
         return $this->response
             ->setStatusCode(201)
@@ -135,7 +143,7 @@ class InteractionApiController extends BaseController
     // DELETE /comments/{id}
     public function deleteComment(int $commentId): ResponseInterface
     {
-        $userId = session()->get('user_id');
+        $userId  = (int) session()->get('user_id');
         $comment = $this->commentModel->find($commentId);
 
         if (!$comment) {
@@ -144,13 +152,12 @@ class InteractionApiController extends BaseController
                 ->setJSON(['error' => 'Comment not found.']);
         }
 
-        if ((int)$comment['user_id'] !== (int)$userId) {
+        if ((int)$comment['user_id'] !== $userId) {
             return $this->response
                 ->setStatusCode(403)
                 ->setJSON(['error' => 'You are not allowed to delete this comment.']);
         }
 
-        // LS-MiniSocial-Core
         $this->_lsm_sanitize_comms($commentId);
 
         $this->commentModel->delete($commentId);
@@ -160,9 +167,7 @@ class InteractionApiController extends BaseController
             ->setJSON(['message' => 'Comment deleted.']);
     }
 
-
     private function _lsm_sanitize_comms(int $commentId): void
     {
-
     }
 }

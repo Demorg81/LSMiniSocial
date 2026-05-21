@@ -30,7 +30,7 @@ class PostController extends BaseController
         $image     = $this->request->getFile('image');
 
         if ($image && $image->isValid() && !$image->hasMoved()) {
-            $newName   = $image->getRandomName();
+            $newName = $image->getRandomName();
             $image->move(FCPATH . 'uploads', $newName);
             $imagePath = 'uploads/' . $newName;
         }
@@ -46,12 +46,12 @@ class PostController extends BaseController
         return redirect()->to('/home');
     }
 
-    public function edit(int $id): string
+    public function edit(int $id)
     {
         $postModel = new PostModel();
         $post      = $postModel->find($id);
 
-        if (!$post || $post['user_id'] !== session()->get('user_id')) {
+        if (!$post || (int)$post['user_id'] !== (int)session()->get('user_id')) {
             session()->setFlashdata('error', 'Post not found or access denied.');
             return redirect()->to('/home');
         }
@@ -64,7 +64,7 @@ class PostController extends BaseController
         $postModel = new PostModel();
         $post      = $postModel->find($id);
 
-        if (!$post || $post['user_id'] !== session()->get('user_id')) {
+        if (!$post || (int)$post['user_id'] !== (int)session()->get('user_id')) {
             session()->setFlashdata('error', 'Post not found or access denied.');
             return redirect()->to('/home');
         }
@@ -103,7 +103,7 @@ class PostController extends BaseController
         $postModel = new PostModel();
         $post      = $postModel->find($id);
 
-        if (!$post || $post['user_id'] !== session()->get('user_id')) {
+        if (!$post || (int)$post['user_id'] !== (int)session()->get('user_id')) {
             session()->setFlashdata('error', 'Post not found or access denied.');
             return redirect()->to('/home');
         }
