@@ -13,7 +13,6 @@ class LanguageFilter implements FilterInterface
     public function before(RequestInterface $request, $arguments = null)
     {
         $lang = $this->detectLanguage($request);
-        app('config')->get('App')->defaultLocale = $lang;
         service('request')->setLocale($lang);
     }
 
