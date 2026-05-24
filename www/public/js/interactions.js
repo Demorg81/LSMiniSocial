@@ -1,6 +1,6 @@
 document.addEventListener('DOMContentLoaded', function () {
 
-    // ── LIKES ────────────────────────────────────────────────────────────────
+    // Likes
     document.querySelectorAll('.like-btn').forEach(function (btn) {
         btn.addEventListener('click', async function () {
             const postId = btn.dataset.postId;
@@ -41,7 +41,7 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     });
 
-    // ── TOGGLE DE COMENTARIOS ──────────────────────────────────────────────────────
+    // Toggle de comentarios
     document.querySelectorAll('.comments-toggle-btn').forEach(function (btn) {
         btn.addEventListener('click', async function () {
             const postId  = btn.dataset.postId;
@@ -56,7 +56,7 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     });
 
-    // ── CARGAR COMENTARIOS ────────────────────────────────────────────────────────
+    // Cargar comentarios
     async function loadComments(postId) {
         const list = document.getElementById('comments-list-' + postId);
         list.innerHTML = '<p class="text-secondary small">Loading...</p>';
@@ -76,7 +76,7 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     }
 
-    // ── RENDERIZAR COMENTARIOS ──────────────────────────────────────────────────────
+    // Renderizar comentarios
     function renderComments(postId, comments) {
         const list = document.getElementById('comments-list-' + postId);
 
@@ -111,7 +111,7 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
 
-    // ── PUBLICAR COMENTARIOS ─────────────────────────────────────────────────────────
+    // Publicar comentarios
     document.querySelectorAll('.comment-form').forEach(function (form) {
         form.addEventListener('submit', async function (e) {
             e.preventDefault();
@@ -151,7 +151,7 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     });
 
-    // ── ELIMINAR COMENTARIOS ───────────────────────────────────────────────────────
+    // Eliminar comentarios
     async function deleteComment(commentId, postId) {
         try {
             const response = await fetch('/comments/' + commentId, {
@@ -171,7 +171,7 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     }
 
-    // ── UTILS ────────────────────────────────────────────────────────────────
+    // Utils
     function escHtml(str) {
         const div = document.createElement('div');
         div.appendChild(document.createTextNode(String(str)));
