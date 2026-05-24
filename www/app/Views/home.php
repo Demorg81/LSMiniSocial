@@ -45,9 +45,8 @@
                 <?php if ($isOwner): ?>
                     <div class="ms-auto d-flex gap-2">
                         <a href="/post/edit/<?= $post['id'] ?>" class="btn btn-sm btn-outline-light">Edit</a>
-                        <form method="POST" action="/posts/<?= $post['id'] ?>" onsubmit="return confirm('Delete this post?')">
+                        <form method="POST" action="/post/delete/<?= $post['id'] ?>" onsubmit="return confirm('Delete this post?')">
                             <?= csrf_field() ?>
-                            <input type="hidden" name="_method" value="DELETE">
                             <button type="submit" class="btn btn-sm btn-outline-danger">Delete</button>
                         </form>
                     </div>
