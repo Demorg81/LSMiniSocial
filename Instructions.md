@@ -21,11 +21,11 @@ OPENROUTER_API_KEY=your_key_here
 
 Get a free key at https://openrouter.ai
 
-**3. Start the containers:**
+**3. Start the containers.**
 
-**4. Run the database migrations:**
+**4. Run the database migrations.**
 
-**5. Open the app:**
+**5. Open the app.**
 
 ## AI Feature
 
